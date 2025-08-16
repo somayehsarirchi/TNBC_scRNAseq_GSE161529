@@ -1,4 +1,8 @@
-# 04_markers.R — Top markers per cluster + DotPlots
+# ============================================================
+# 04_markers.R  |  FindAllMarkers + Top20 per cluster
+# Outputs: results/tables/AllMarkers_all.csv, Top20-Markers_byCluster.csv
+# Figures: dotplots in results/figures/
+# ============================================================
 
 source("R/00_utils.R")
 suppressPackageStartupMessages({
