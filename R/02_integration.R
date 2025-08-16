@@ -1,4 +1,7 @@
-# 02_integration.R — Integrate (RPCA) + UMAP + clusters
+# ============================================================
+# 02_integration.R  |  RPCA integration, UMAP, clustering
+# Output: Integrated_TNBC_NormalEpi.rds + UMAP figures
+# ============================================================
 
 source("R/00_utils.R")
 
