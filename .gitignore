@@ -1,18 +1,26 @@
 # R
+.Rproj.user/
 .Rhistory
 .RData
-.Rproj.user/
 .Ruserdata
 
-# data/results big
-data/*
-!data/README.md
-results/**/*_big.*
-results/**/*.rds
-*.rds
-*.h5
-*.h5ad
+# Renv / packrat
+renv/library/
+renv/staging/
+packrat/
 
-# OS/IDE
+# OS
 .DS_Store
 Thumbs.db
+
+# Large or derived
+*.Rds
+*.rds
+*.RData
+*.log
+*.tmp
+*.zip
+
+# Figures (keep PDFs/PNGs you want to show; ignore heavy intermediates)
+results/figures/*.tiff
+results/figures/*.svg
