@@ -1,4 +1,10 @@
-# 03_annotation_SingleR.R — Hierarchical annotation (celldex + breast ref)
+# ============================================================
+# 03_annotation_SingleR.R  |  Hierarchical SingleR annotation
+# - Major labels via HPCA + Blueprint
+# - Epithelial subtypes via breast reference
+# - Builds FinalLabel and Family
+# Outputs: tables + updated object (optional save)
+# ============================================================
 
 source("R/00_utils.R")
 suppressPackageStartupMessages({
