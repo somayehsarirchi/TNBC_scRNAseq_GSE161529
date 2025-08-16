@@ -1,4 +1,16 @@
-# 01_load_qc.R — Load 10x data & basic QC
+# ============================================================
+# 01_qc_load.R  |  Load raw 10x, basic QC, save QC’d objects
+# Project: TNBC scRNA-seq (GSE161529)
+# Author: Somayeh Sarirchi  |  License: MIT
+# ------------------------------------------------------------
+# What this does:
+# - Reads 10x matrices for TNBC and Normal-Epi
+# - Basic QC filters (nFeature_RNA, MT%)
+# - Normalization + HVG
+# - Saves TNBC_QC_HVG.rds and NormalEpi_QC_HVG.rds
+# Reproducibility: set.seed(), sessionInfo() at end.
+# ============================================================
+
 
 source("R/00_utils.R")
 suppressPackageStartupMessages({
