@@ -1,4 +1,8 @@
-# 05_de_pseudobulk_edgeR.R — Pseudobulk DE (TNBC vs NormalEpi) by Family
+# ============================================================
+# 05_pseudobulk_edgeR.R  |  edgeR DE (TNBC vs NormalEpi) by Family
+# Outputs per family under results/tables/DE_by_family/*
+# Figures: volcano plots under results/figures/volcano/*
+# ============================================================
 
 source("R/00_utils.R")
 suppressPackageStartupMessages({
