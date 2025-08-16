@@ -7,14 +7,14 @@
 #
 # Outputs (under results/ and results/plots/):
 #   - results/copykat_TNBC_only.rds
-#   - results/DEGs_TNBC_aneuploid_vs_diploid.csv
-#   - results/DEGs_TNBC_aneuploid_vs_diploid-Sig.csv
-#   - results/enrich_GO_TNBC_up.csv
-#   - results/enrich_KEGG_TNBC_up.csv
-#   - results/plots/enrich_GO_up_top10_padj.pdf/png
-#   - results/plots/enrich_KEGG_up_top10_padj.pdf/png
-#   - results/plots/enrich_GO_up_top10_combined.pdf/png
-#   - results/plots/enrich_KEGG_up_top10_combined.pdf/png
+#   - results/tables/DEGs_TNBC_aneuploid_vs_diploid.csv
+#   - results/tables/DEGs_TNBC_aneuploid_vs_diploid-Sig.csv
+#   - results/tables/enrich_GO_TNBC_up.csv
+#   - results/tables/enrich_KEGG_TNBC_up.csv
+#   - results/figures/enrich_GO_up_top10_padj.pdf/png
+#   - results/figures/enrich_KEGG_up_top10_padj.pdf/png
+#   - results/figures/enrich_GO_up_top10_combined.pdf/png
+#   - results/figures/enrich_KEGG_up_top10_combined.pdf/png
 #
 # Notes:
 #   - This script mirrors the logic you used during development, with English comments.
