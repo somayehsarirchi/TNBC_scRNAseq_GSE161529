@@ -69,7 +69,7 @@ TNBC_scRNAseq_GSE161529/
 ## 📊 Example Visuals
 
 ### UMAP of TNBC vs Normal epithelial cells
-![UMAP of TNBC vs Normal epithelial cells](results/figures/Top-10-GO-BP-Terms.png)
+![UMAP of TNBC vs Normal epithelial cells](results/figures/Dimplot-Split.png)
 
 ### Pathway Enrichment (GO Biological Process)
 ![Top 10 GO BP Terms](results/figures/Top-10-GO-BP-Terms.png)
