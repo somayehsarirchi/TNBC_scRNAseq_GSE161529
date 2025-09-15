@@ -1,4 +1,6 @@
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17127154.svg)](https://doi.org/10.5281/zenodo.17127154)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17127154.svg)](https://doi.org/10.5281/zenodo.17127154)    [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+![UMAP of TNBC vs Normal epithelial cells](results/figures/dimplot_split.png)
 
 # Triple-Negative Breast Cancer (TNBC) scRNA-seq Analysis — GSE161529
 
