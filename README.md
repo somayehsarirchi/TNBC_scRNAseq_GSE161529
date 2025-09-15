@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17127154.svg)](https://doi.org/10.5281/zenodo.17127154)
+
 # Triple-Negative Breast Cancer (TNBC) scRNA-seq Analysis — GSE161529
 
 **Author:** Somayeh Sarirchi, Ph.D.  
@@ -116,7 +118,7 @@ CNV heatmaps highlighting genomic gains/losses in malignant clusters.
 
 If you use this repository or scripts, please cite:
 
-Sarirchi, S. (2025). TNBC scRNA-seq (GSE161529) — End-to-end reproducible workflow.
+Sarirchi, S. (2025). TNBC scRNA-seq (GSE161529) — DOI: 10.5281/zenodo.17127154 
 GitHub. https://github.com/somayehsarirchi/TNBC_scRNAseq_GSE161529
 
 ✉ Contact
