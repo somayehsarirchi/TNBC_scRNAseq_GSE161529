@@ -43,6 +43,7 @@ The workflow follows a **modular structure** to ensure clarity and reproducibili
 ---
 
 ## 📂 Repository Structure
+
 TNBC_scRNAseq_GSE161529/
 │── R/ # Analysis scripts
 │── results/
@@ -109,8 +110,6 @@ For inquiries or collaboration:
 
 💻 GitHub: somayehsarirchi
 
-
----
 
 
 
