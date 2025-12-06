@@ -1,0 +1,237 @@
+---
+title: "Triple-Negative Breast Cancer (TNBC) scRNA-seq Analysis – GSE161529"
+author: "Somayeh Sarirchi"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_depth: 3
+    toc_float: true
+    number_sections: true
+    theme: readable
+    df_print: paged
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  echo       = TRUE,
+  message    = FALSE,
+  warning    = FALSE,
+  fig.align  = "center",
+  fig.width  = 7,
+  fig.height = 5
+)
+
+# set project root (adapt if needed)
+root_dir <- here::here()
+r_dir    <- file.path(root_dir, "R")
+res_dir  <- file.path(root_dir, "results")
+
+if (!dir.exists(res_dir)) dir.create(res_dir, recursive = TRUE)
+
+# load required packages (adapt to your environment)
+library(Seurat)
+library(SingleR)
+library(celldex)
+library(edgeR)
+library(data.table)
+library(ggplot2)
+library(enrichR)
+library(patchwork)
+# library(CopyKAT)  # uncomment if installed
+1. Introduction
+
+This report summarizes an end-to-end, fully reproducible single-cell RNA-seq workflow for the Triple-Negative Breast Cancer (TNBC) dataset GSE161529, comparing TNBC tumor cells with normal epithelial cells.
+
+The pipeline follows these main stages:
+
+Quality control and filtering of raw 10X data
+
+Data integration of TNBC and normal epithelial samples
+
+Cell type annotation using SingleR and breast-epithelial reference data
+
+Cluster marker identification
+
+Pseudobulk differential expression (DE) with edgeR
+
+Functional enrichment analysis of DE genes
+
+Copy number variation (CNV) analysis using CopyKAT (optional)
+
+All heavy lifting is implemented in modular R scripts under the R/ folder.
+This R Markdown file simply sources those scripts and organizes the results into a single, human-readable report.
+
+2. Data loading and quality control
+Writing
+This script should:
+- read raw 10X data
+- create a Seurat object (e.g., seurat_obj)
+- perform QC and filtering
+
+source(file.path(r_dir, "01_load_qc.R"))
+
+If your script saves the object instead, e.g. to results/seurat_qc.rds, load it here:
+seurat_obj <- readRDS(file.path(res_dir, "seurat_qc.rds"))
+Basic QC summary (adapt to your actual object name)
+
+seurat_obj
+
+Writing
+Example QC plots (modify according to your object names / metadata)
+
+VlnPlot(seurat_obj, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
+
+3. Integration of TNBC and normal epithelial datasets
+Writing
+This script should:
+- perform normalization and feature selection
+- integrate TNBC + normal epithelium using Seurat RPCA (or similar)
+- run PCA, UMAP, clustering
+
+source(file.path(r_dir, "02_integration.R"))
+
+If integration results are saved as RDS:
+seurat_integrated <- readRDS(file.path(res_dir, "seurat_integrated.rds"))
+
+seurat_integrated
+
+Writing
+
+DimPlot(seurat_integrated, reduction = "umap", group.by = "sample_type", pt.size = 0.3) +
+ggtitle("UMAP: TNBC vs Normal epithelial cells")
+
+4. Cell type annotation (SingleR)
+Writing
+This script should:
+- run SingleR using a breast-epithelial reference (e.g., celldex::HumanPrimaryCellAtlasData)
+- add cell type labels to metadata (e.g., seurat_integrated$celltype)
+
+source(file.path(r_dir, "03_annotation_SingleR.R"))
+
+Example cell-type UMAP
+
+DimPlot(seurat_integrated, group.by = "celltype", label = TRUE, repel = TRUE, pt.size = 0.3) +
+ggtitle("UMAP colored by SingleR-derived cell types")
+
+5. Cluster markers
+Writing
+This script should:
+- identify cluster-specific markers (e.g., FindAllMarkers)
+- save results as a table in results/markers_TNBC_vs_normal.csv
+
+source(file.path(r_dir, "04_markers.R"))
+
+markers_path <- file.path(res_dir, "markers_TNBC_vs_normal.csv")
+if (file.exists(markers_path)) {
+markers_tbl <- data.table::fread(markers_path)
+head(markers_tbl)
+}
+
+Writing
+Example marker visualization (adapt gene names / cluster IDs)
+
+FeaturePlot(seurat_integrated, features = c("KRT8", "KRT18"), cols = c("lightgrey", "red"), pt.size = 0.3) &
+theme(plot.title = element_text(hjust = 0.5))
+
+6. Pseudobulk differential expression (edgeR)
+Writing
+This script should:
+- aggregate counts by sample / condition
+- run edgeR for TNBC vs Normal
+- save DE results (e.g., results/edgeR_DE_TNBC_vs_Normal.csv)
+
+source(file.path(r_dir, "05_de_pseudobulk_edgeR.R"))
+
+de_path <- file.path(res_dir, "edgeR_DE_TNBC_vs_Normal.csv")
+if (file.exists(de_path)) {
+de_tbl <- data.table::fread(de_path)
+head(de_tbl[order(FDR)][1:10])
+}
+
+Writing
+Simple volcano plot (adapt column names if needed)
+
+if (exists("de_tbl")) {
+de_tbl$log10FDR <- -log10(de_tbl$FDR + 1e-300)
+ggplot(de_tbl, aes(logFC, log10FDR)) +
+geom_point(alpha = 0.4) +
+geom_vline(xintercept = c(-1, 1), linetype = "dashed") +
+geom_hline(yintercept = -log10(0.05), linetype = "dashed") +
+labs(
+x = "log2 fold change (TNBC vs Normal)",
+y = "-log10(FDR)",
+title = "Pseudobulk DE: TNBC vs Normal epithelial cells"
+) +
+theme_minimal()
+}
+
+7. Functional enrichment analysis
+Writing
+This script should:
+- perform GO / pathway enrichment on significant DE genes
+- save results in results/enrichment_GO_BP_TNBC.csv (or similar)
+
+source(file.path(r_dir, "06_enrichment_analysis.R"))
+
+enr_path <- file.path(res_dir, "enrichment_GO_BP_TNBC.csv")
+if (file.exists(enr_path)) {
+enr_tbl <- data.table::fread(enr_path)
+head(enr_tbl)
+}
+
+Writing
+
+if (exists("enr_tbl")) {
+top_enr <- enr_tbl[1(10, .N)]
+ggplot(top_enr, aes(x = reorder(Term, Combined.Score), y = Combined.Score)) +
+geom_col() +
+coord_flip() +
+labs(
+x = "GO Biological Process",
+y = "Combined score",
+title = "Top enriched GO BP terms (TNBC vs Normal)"
+) +
+theme_minimal()
+}
+
+8. CNV analysis (CopyKAT – optional)
+Writing
+CopyKAT can be computationally intensive; this chunk is disabled by default.
+To run CNV analysis, set eval=TRUE above and make sure CopyKAT is installed.
+
+source(file.path(r_dir, "07_cnv_analysis.R"))
+
+Depending on your script, you might produce:
+- CNV heatmaps
+- classification of cells as diploid vs aneuploid
+Writing
+Example placeholder for a CNV heatmap figure produced by CopyKAT
+knitr::include_graphics("results/cnv_heatmap_TNBC.png")
+9. Reproducibility notes
+
+All analysis steps are:
+
+Defined in modular R scripts under the R/ folder.
+
+Orchestrated through this R Markdown report.
+
+Designed so that all tables and figures can be regenerated by re-running the pipeline from the raw data.
+
+To re-run the full workflow from the command line:
+
+Rscript R/01_load_qc.R
+Rscript R/02_integration.R
+Rscript R/03_annotation_SingleR.R
+Rscript R/04_markers.R
+Rscript R/05_de_pseudobulk_edgeR.R
+Rscript R/06_enrichment_analysis.R
+Rscript R/07_cnv_analysis.R   # optional
+
+
+Or simply knit this report:
+
+rmarkdown::render("TNBC_scRNAseq_report.Rmd")
+
+
+This will recreate all intermediate objects, figures, and summary tables in the results/ directory (if you choose to keep it Git-ignored) or in memory during knitting.
